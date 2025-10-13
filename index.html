@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Open-Meteo Weather</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      rel="preconnect"
+      href="https://geocoding-api.open-meteo.com"
+      crossorigin
+    />
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://air-quality-api.open-meteo.com"
+      crossorigin
+    />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="brand">🌤️ <strong>Open-Meteo Weather</strong></div>
+
+      <form id="search-form" class="search" autocomplete="off" role="search">
+        <label class="sr-only" for="q">Search for a city</label>
+        <input
+          id="q"
+          type="text"
+          placeholder="Search city (e.g., Tokyo)"
+          aria-autocomplete="list"
+          aria-controls="suggestions"
+          aria-expanded="false"
+        />
+        <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+        <button class="btn" type="submit" aria-label="Use first suggestion">
+          Search
+        </button>
+      </form>
+
+      <div class="controls" role="group" aria-label="Display options">
+        <button id="loc-btn" class="chip" title="Use my location">
+          📍 My location
+        </button>
+        <button id="btn-c" class="chip" data-unit="celsius" aria-pressed="true">
+          °C
+        </button>
+        <button
+          id="btn-f"
+          class="chip"
+          data-unit="fahrenheit"
+          aria-pressed="false"
+        >
+          °F
+        </button>
+        <button
+          id="theme-toggle"
+          class="chip"
+          title="Toggle dark/light"
+          aria-pressed="true"
+        >
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card current" aria-live="polite">
+        <div class="current-row">
+          <div>
+            <h1 id="location-name">—</h1>
+            <p id="timestamp" class="muted">—</p>
+          </div>
+          <div class="temp-wrap">
+            <div id="current-temp" class="temp">—</div>
+            <div id="current-desc" class="desc">—</div>
+          </div>
+        </div>
+
+        <div id="loading" class="loading" hidden>Loading…</div>
+        <div
+          id="status"
+          class="status muted"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+        <div class="stats">
+          <div><span>Feels</span><strong id="feels-like">—</strong></div>
+          <div><span>Wind</span><strong id="wind">—</strong></div>
+          <div><span>Dir</span><strong id="wind-dir">—</strong></div>
+          <div><span>Humidity</span><strong id="humidity">—</strong></div>
+          <div><span>Dew Pt</span><strong id="dewpoint">—</strong></div>
+          <div><span>Pressure</span><strong id="pressure">—</strong></div>
+          <div><span>Clouds</span><strong id="cloud">—</strong></div>
+          <div><span>Visibility</span><strong id="vis">—</strong></div>
+          <div><span>Precip</span><strong id="precip">—</strong></div>
+          <div><span>UV</span><strong id="uv">—</strong></div>
+          <div><span>Sunrise</span><strong id="sunrise">—</strong></div>
+          <div><span>Sunset</span><strong id="sunset">—</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Next 24 hours</h2>
+        <div id="hourly" class="row-scroll"></div>
+
+        <div class="charts">
+          <div class="chart-card">
+            <div class="chart-title">Temp (24h)</div>
+            <svg
+              id="chart-temp"
+              class="chart"
+              viewBox="0 0 300 100"
+              aria-label="Temperature chart"
+            ></svg>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Precip % (24h)</div>
+            <svg
+              id="chart-precip"
+              class="chart"
+              viewBox="0 0 300 100"
+              aria-label="Precipitation chart"
+            ></svg>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">UV (24h)</div>
+            <svg
+              id="chart-uv"
+              class="chart"
+              viewBox="0 0 300 100"
+              aria-label="UV chart"
+            ></svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>7-day forecast</h2>
+        <div id="daily" class="days"></div>
+      </section>
+
+      <section class="card">
+        <h2>Air quality</h2>
+        <div class="aq-grid">
+          <div><span>US AQI</span><strong id="aqi">—</strong></div>
+          <div><span>PM2.5</span><strong id="pm25">—</strong></div>
+          <div><span>PM10</span><strong id="pm10">—</strong></div>
+          <div><span>O₃</span><strong id="o3">—</strong></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <small
+        >Data by
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noreferrer noopener"
+          >Open-Meteo</a
+        ></small
+      >
+    </footer>
+
+    <script src="js/index.js" type="module"></script>
+  </body>
+</html>

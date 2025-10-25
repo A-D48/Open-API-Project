@@ -10,6 +10,7 @@
   --warn: #fde047;
   --bad: #fca5a5;
 }
+
 html[data-theme="light"] {
   --bg: #f7f8fb;
   --card: #ffffff;
@@ -22,72 +23,101 @@ html[data-theme="light"] {
   --warn: #92400e;
   --bad: #7f1d1d;
 }
+
+/* GLOBAL RESET / BASE */
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial;
   background: var(--bg);
   color: var(--text);
 }
+
 a {
   color: var(--accent);
   text-decoration: none;
 }
 
+/* =============== HEADER BAR =============== */
+
 .bar {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
   position: sticky;
   top: 0;
+  z-index: 10;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  z-index: 10;
+  padding: 14px 16px;
+
+  /* desktop / default: three columns */
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 12px;
 }
+
+/* Brand (left) */
 .brand {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+/* Search (middle) */
 .search {
   position: relative;
   display: flex;
+  align-items: center;
   gap: 8px;
-  flex: 1;
+
+  /* allow it to stretch in the middle column */
+  min-width: 0;
+  width: 100%;
   max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .search input {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   padding: 12px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--text);
   outline: none;
+  font-size: 1rem;
+  line-height: 1.3;
 }
+
 .btn {
+  flex-shrink: 0;
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--chip);
   color: var(--text);
   cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  line-height: 1.2;
 }
 
+/* Suggestions dropdown */
 .suggestions {
   position: absolute;
   top: calc(100% + 6px);
@@ -102,10 +132,13 @@ a {
   max-height: 300px;
   overflow: auto;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  z-index: 50;
 }
+
 .suggestions[hidden] {
   display: none;
 }
+
 .suggestions li {
   display: flex;
   justify-content: space-between;
@@ -113,12 +146,26 @@ a {
   padding: 10px 12px;
   border-radius: 10px;
   cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.3;
 }
+
 .suggestions li:hover,
 .suggestions li.active {
   background: var(--chip);
 }
 
+/* Controls (right) */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: visible;
+}
+
+/* Generic chip style */
 .chip {
   border: 1px solid var(--border);
   background: var(--chip);
@@ -126,16 +173,102 @@ a {
   padding: 8px 12px;
   border-radius: 999px;
   cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
 .chip[aria-pressed="true"] {
   outline: 2px solid var(--accent);
+  outline-offset: 0;
+  /* subtle halo like your screenshot */
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--accent);
+  border-color: var(--accent);
 }
+
+/* Make sure chip/button row visually matches height */
+.controls .chip,
+.controls .btn {
+  height: 36px;
+  min-height: 36px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  font-size: 0.9rem;
+}
+
+/* MOBILE NAV BAR LAYOUT
+   At narrow screens we stack:
+   row1: brand
+   row2: search
+   row3: controls (scrollable horizontally so chips never wrap ugly)
+*/
+@media (max-width: 640px) {
+  .bar {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    align-items: stretch;
+  }
+
+  .brand {
+    order: 1;
+    justify-content: flex-start;
+    font-size: 1rem;
+  }
+
+  .search {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .controls {
+    order: 3;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 4px;
+  }
+
+  .controls::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .controls .chip,
+  .controls .btn {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+    min-height: 34px;
+    height: 34px;
+  }
+
+  .search input {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+}
+
+/* =============== PAGE LAYOUT SECTIONS =============== */
 
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 16px;
 }
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -143,46 +276,98 @@ a {
   padding: 16px;
   margin-bottom: 16px;
 }
+
 h1 {
   margin: 0.2rem 0 0;
-}
-h2 {
-  margin: 0.2rem 0 12px;
-}
-.muted {
-  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
+h2 {
+  margin: 0.2rem 0 12px;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* CURRENT WEATHER HEADER ROW */
 .current-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 }
-.temp {
-  font-size: 56px;
-  font-weight: 800;
-}
-.desc {
-  opacity: 0.9;
-  text-align: right;
-}
+
+/* right side block with temperature */
 .temp-wrap {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  flex-shrink: 0;
+  text-align: right;
 }
 
+.temp {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  word-break: break-word;
+}
+
+.desc {
+  opacity: 0.9;
+  text-align: right;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+/* On very narrow screens: stack temp under location, scale temp */
+@media (max-width: 480px) {
+  .current-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .temp-wrap {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .desc {
+    text-align: left;
+  }
+
+  .temp {
+    font-size: 44px;
+  }
+}
+
+/* LOADING & STATUS */
 .loading {
   margin-top: 10px;
   padding: 8px 12px;
   border: 1px dashed var(--border);
   border-radius: 8px;
   color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
+
 .status {
   margin-top: 6px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
+
+/* =============== STATS GRID =============== */
 
 .stats {
   display: grid;
@@ -190,11 +375,21 @@ h2 {
   gap: 10px;
   margin-top: 12px;
 }
+
+/* medium screens: 2 columns */
 @media (max-width: 900px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* tiny screens: 1 column */
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stats > div {
   display: flex;
   justify-content: space-between;
@@ -203,25 +398,48 @@ h2 {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
+
+/* =============== HOURLY SCROLLER =============== */
 
 .row-scroll {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(92px, 1fr);
   gap: 8px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
 }
+
 .hour {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px;
   text-align: center;
+  scroll-snap-align: start;
+  background: rgba(255, 255, 255, 0.02);
+  min-width: 92px;
 }
+
 .hour .t {
   font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3;
 }
+.hour .h,
+.hour .ic,
+.hour .x {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* =============== CHARTS =============== */
 
 .charts {
   display: grid;
@@ -229,78 +447,135 @@ h2 {
   gap: 10px;
   margin-top: 12px;
 }
+
+/* tablet / below */
 @media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;
   }
 }
+
+/* ensure charts don't overflow on small screens */
 .chart-card {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.02);
 }
+
 .chart-title {
   font-size: 0.9rem;
   color: var(--muted);
   margin-bottom: 6px;
+  line-height: 1.4;
 }
+
 .chart {
   width: 100%;
   height: auto;
   display: block;
+  max-width: 100%;
 }
+
+/* =============== DAILY FORECAST GRID =============== */
 
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
+
+/* medium screens: 3 columns */
 @media (max-width: 800px) {
   .days {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* tiny phones: 2 columns for bigger tap targets */
+@media (max-width: 500px) {
+  .days {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .day {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
+
 .day .hi {
   font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3;
 }
+
 .day .lo {
   color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
+
 .day .pp {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--muted);
   margin-top: 4px;
+  line-height: 1.4;
+  word-break: break-word;
 }
+
+/* =============== AIR QUALITY GRID =============== */
 
 .aq-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
+
+/* medium: 2 columns */
 @media (max-width: 800px) {
   .aq-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* tiny: 1 column so each block is full width */
+@media (max-width: 400px) {
+  .aq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .aq-grid > div {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+  word-break: break-word;
 }
+
+/* =============== FOOTER =============== */
 
 .foot {
   padding: 24px;
   text-align: center;
   color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
-/* a11y utility */
+/* =============== ACCESSIBILITY UTILITY =============== */
+
 .sr-only {
   position: absolute;
   width: 1px;

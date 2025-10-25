@@ -79,14 +79,7 @@ project-folder/
    ```bash
    git clone https://github.com/A-D48/Open-API-Project
    ```
-
-2. **Navigate into the folder:**
-
-   ```bash
-   cd open-meteo-weather
-   ```
-
-3. **Open the app:**
+2. **Open the app:**
    Simply open `index.html` in your browser — no server setup required.
 
 ---

@@ -126,11 +126,3 @@ This project is fully mobile-friendly:
 AliReza Daneshpazhooh
 [LinkedIn] https://www.linkedin.com/in/a-d48
 [GitHub] https://github.com/A-D48
-
----
-
-## 📜 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----

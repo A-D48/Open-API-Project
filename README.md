@@ -114,8 +114,9 @@ This project is fully mobile-friendly:
 
 ---
 
-## 👤 Author
+## 🧑‍💻 Author
 
-AliReza Daneshpazhooh
-[LinkedIn] https://www.linkedin.com/in/a-d48
-[GitHub] https://github.com/A-D48
+** AliReza Daneshpazhooh
+• [LinkedIn](https://www.linkedin.com/in/a-d48/) 
+• [GitHub](https://github.com/A-D48)
+
